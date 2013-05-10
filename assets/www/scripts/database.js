@@ -1,8 +1,7 @@
-
 window.easynote.on_device_ready(function() {
-	
+
 	var traceTag = 'database.js:';
-	console.log(traceTag + 'start database.js');	
+	console.log(traceTag + 'start database.js');
 	window.easynote.database = {
 		isOnline : false,
 		size : 2 * 1024 * 1024,
@@ -21,14 +20,16 @@ window.easynote.on_device_ready(function() {
 	var pri = {
 		handle : null
 	};
-
+	console.debug(traceTag + 'try to open database.');
 	pri.handle = window.openDatabase('easynote', '1.0', 'easynote database',
 			pub.size, function(database) {
 				pri.migrate(database);
 			});
 
 	pub.isOnline = pri.handle != null;
+
 	console.debug(traceTag + 'is database online? ' + pub.isOnline);
+	console.debug(traceTag = 'declare pri.migrate');
 	pri.migrate = function(database) {
 		console.debug(traceTag + 'pri.migrate started.');
 		database.changeVersion('', '1.0', function(tx) {
@@ -39,15 +40,15 @@ window.easynote.on_device_ready(function() {
 
 	pri.migrate10 = function(tx) {
 		console.debug(traceTag + 'pri.migrate10 started.');
-		tx.executeSQL('create table AccountType(id int,name nvarchar(20))');
-		tx.executeSQL('insert into AccountType(id,name) values(?,?)',
+		tx.executeSql('create table AccountType(id int,name nvarchar(20))');
+		tx.executeSql('insert into AccountType(id,name) values(?,?)',
 				[ 1, '资产' ]);
-		tx.executeSQL('insert into AccountType(id,name) values(?,?)', [ -1,
+		tx.executeSql('insert into AccountType(id,name) values(?,?)', [ -1,
 				'负债' ]);
-		tx.executeSQL('create table Account(id int, name nvarchar(20), '
+		tx.executeSql('create table Account(id int, name nvarchar(20), '
 				+ 'account_type int, balance float, money_unit int,'
 				+ ' visible int,display_order int,description nvarchar(100)');
-		tx.executeSQL('insert into Account('
+		tx.executeSql('insert into Account('
 				+ 'id,name,account_type,balance,money_unit,visible,'
 				+ 'display_order,description) ' + 'values (?,?,?,?,?,?,?,?)', [
 				1, '现金', 1, 0, 1, 1, 1, '现金帐号' ]);
@@ -68,7 +69,7 @@ window.easynote.on_device_ready(function() {
 		var exist = false;
 		if (id > 0) {
 			pri.handle.transaction(function(tx) {
-				tx.executeSQL('select id from ' + table + ' where id=?',
+				tx.executeSql('select id from ' + table + ' where id=?',
 						[ id ], function(tx, result) {
 							exist = result.rows.length > 0;
 						}, function(err) {
@@ -86,10 +87,13 @@ window.easynote.on_device_ready(function() {
 		console.debug(traceTag + 'pub.list_account started.');
 		var retAccountList = [];
 		var sql = "select * from Account";
-		pri.handle.transaction(sql, [], function(tx, result) {
-			retAccountList = pri.copy_result_list(result);
-		}, function(err) {
+		pri.handle.transaction(function(tx) {
+			tx.executeSql(sql, [],
+				function(tx, result) {
+				retAccountList = pri.copy_result_list(result);
+			}, 	function(err) {
 
+			});
 		});
 		console.debug(traceTag + 'pub.list_account finished.');
 		return retAccountList;
@@ -101,7 +105,7 @@ window.easynote.on_device_ready(function() {
 				var sql = 'update Account set ' + 'name=?' + ',account_type=?'
 						+ ',balance=?' + ',money_unit=?' + ',visible=?'
 						+ ',display_order=?' + ',description=?' + 'where id=?';
-				tx.executeSQL(sql,
+				tx.executeSql(sql,
 						[ account.name, account.account_type, account.balance,
 								account.money_unit, account.visible,
 								account.display_order, account.description,

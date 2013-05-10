@@ -1,15 +1,9 @@
 (function() {
-	var traceTag='account.js:';
-	console.log(traceTag+' started')
-	$(window).load(function() {
-		document.addEventListener("deviceready", onDeviceReady, true);
-	});
-	function onDeviceReady() {
-		console.log(traceTag+' onDeviceReady started.')
-		if (!window.easynote)
-			return;
-		if (!window.easynote.database)
-			return;
+	var traceTag = 'account.js:';
+	if (!window.easynote)
+		return;
+	function onPageChange() {		
+		console.log(traceTag + ' onPageChange started')
 		var accounts = window.easynote.database.list_account();
 		var count = accounts.length;
 		for ( var idx = 0; idx < count; idx++) {
@@ -19,4 +13,5 @@
 			$('#account-list').append($(html));
 		}
 	}
+	window.easynote.on_page_before_show(window.easynote.dirs.www+'/account.html', onPageChange);
 })();
