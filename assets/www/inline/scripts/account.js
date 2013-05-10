@@ -1,8 +1,11 @@
-(function() {	
+(function() {
+	var traceTag='account.js:';
+	console.log(traceTag+' started')
 	$(window).load(function() {
 		document.addEventListener("deviceready", onDeviceReady, true);
 	});
 	function onDeviceReady() {
+		console.log(traceTag+' onDeviceReady started.')
 		if (!window.easynote)
 			return;
 		if (!window.easynote.database)

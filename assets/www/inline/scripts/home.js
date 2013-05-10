@@ -1,13 +1,6 @@
-(function(){
-	
-	$(window).load(function(){
-		document.addEventListener("deviceready", onDeviceReady, true);
-		
-	});
-	function onDeviceReady() {
-		
-    }
-})();
+window.easynote.on_device_ready(function(){
+	navigator.notification.alert('THIS IS FROM HOME.JS');
+});
 
 
 

@@ -1,8 +1,8 @@
-(function() {
-	var traceTag = 'database:';
-	console.log(traceTag + 'start database.js');
-	if (!window.easynote)
-		window.easynote = {};
+
+window.easynote.on_device_ready(function() {
+	
+	var traceTag = 'database.js:';
+	console.log(traceTag + 'start database.js');	
 	window.easynote.database = {
 		isOnline : false,
 		size : 2 * 1024 * 1024,
@@ -114,4 +114,4 @@
 		}
 	};
 
-})();
+});
