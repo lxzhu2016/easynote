@@ -3,13 +3,12 @@
 	if (!window.easynote)
 		return;
 	function onPageChange() {		
-		console.log(traceTag + ' onPageChange started')
+		console.log(traceTag + ' onPageChange started');
 		var accounts = window.easynote.database.list_account();
 		var count = accounts.length;
 		for ( var idx = 0; idx < count; idx++) {
 			var ac = accounts[idx];
-			var html = '<div id="account-' + ac.id + '">' + '<p>' + ac.name
-					+ '</p>' + '</div>';
+			var html = '<div id="account-' + ac.id + '">' + '<p>' + ac.name + '</p> </div>';
 			$('#account-list').append($(html));
 		}
 	}

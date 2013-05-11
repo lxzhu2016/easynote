@@ -1,9 +1,11 @@
-.div-float-left{
-	float:left
+.div-float-left {
+	float: left
 }
-.div-float-right{
-	float:right
+
+.div-float-right {
+	float: right
 }
-.div-float-clear{
-	clear:both
+
+.div-float-clear {
+	clear: both
 }

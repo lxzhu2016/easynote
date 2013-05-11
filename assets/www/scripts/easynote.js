@@ -4,12 +4,15 @@
 		window.easynote = {
 			dirs:{
 				assets:'file:///android_asset',
-				www:'file:///android_asset/www',				
+				www:'file:///android_asset/www'				
 			}
 	};
+	//声明pub和pri这两个变量。
+	//pub是会挂在window.easynote上的全局变量的别名。
+	//pri是本地使用的其他所有函数和变量的容器。将他们都挂在pri上，有利于名字解析。
 	var pub = window.easynote;
 	var pri = {
-		is_device_ready : false,
+		is_device_ready : false,//设备是否准备好(PhoneGap事件)
 		device_ready_callbacks : [],
 		trace_buffer : [],
 		trace : function(level, message) {
@@ -72,7 +75,8 @@
 			}
 			return retTEXT;
 		}
-	}
+	};
+	
 	pri.trace_to_console = function(level, message) {
 		if ('log' === level)
 			console.log(message);
@@ -108,16 +112,16 @@
 		pri.on_page_before_show_callbacks[url] = callback;
 	};
 
-	pri.fire_registered_page_before_show_callback = function(evt) {		
-		pri.trace(pri.trace_levels.debug,'evt.options='+pri.dump(evt.options));
-		var callback = pri.on_page_before_show_callbacks[evt.options.target];
+	pri.fire_registered_page_before_show_callback = function(data) {		
+		pri.trace(pri.trace_levels.debug,'data.options='+pri.dump(data.options));
+		var callback = pri.on_page_before_show_callbacks[data.absUrl];
 		if (callback === undefined || callback === null) {
 			pri.trace(pri.trace_levels.debug, traceTag
-					+ 'does not find callback for:' + evt.options.target);
+					+ 'does not find callback for:' + data.absUrl);
 			return;
 		} else if (typeof (callback) != 'function') {
 			pri.trace(pri.trace_levels.debug, traceTag + 'callback for:'
-					+ evt.options.target + ' is not function');
+					+ data.absUrl + ' is not function');
 			return;
 		}
 		callback();
@@ -140,10 +144,6 @@
 											traceLog = traceTag
 													+ 'pagechange callback arguments length:'
 													+ arguments.length;
-											pri.trace(pri.trace_levels.debug,
-													traceLog);
-                                            
-											traceLog =traceTag+'data.options='+ pri.dump(data.options);
 											pri.trace(pri.trace_levels.debug,
 													traceLog);
 											pri

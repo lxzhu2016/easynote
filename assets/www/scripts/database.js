@@ -23,10 +23,11 @@ window.easynote.on_device_ready(function() {
 	console.debug(traceTag + 'try to open database.');
 	pri.handle = window.openDatabase('easynote', '1.0', 'easynote database',
 			pub.size, function(database) {
+			  console.debug(traceTag+'database creation callback.');
 				pri.migrate(database);
 			});
 
-	pub.isOnline = pri.handle != null;
+	pub.isOnline = pri.handle !== null;
 
 	console.debug(traceTag + 'is database online? ' + pub.isOnline);
 	console.debug(traceTag = 'declare pri.migrate');
@@ -41,13 +42,14 @@ window.easynote.on_device_ready(function() {
 	pri.migrate10 = function(tx) {
 		console.debug(traceTag + 'pri.migrate10 started.');
 		tx.executeSql('create table AccountType(id int,name nvarchar(20))');
+		console.debug(traceTag + 'table AccountType created.');
 		tx.executeSql('insert into AccountType(id,name) values(?,?)',
 				[ 1, '资产' ]);
 		tx.executeSql('insert into AccountType(id,name) values(?,?)', [ -1,
 				'负债' ]);
-		tx.executeSql('create table Account(id int, name nvarchar(20), '
-				+ 'account_type int, balance float, money_unit int,'
-				+ ' visible int,display_order int,description nvarchar(100)');
+		tx.executeSql('create table Account(id int, name nvarchar(20), ' 
+			+ 'account_type int, balance float, money_unit int,' 
+			+ ' visible int,display_order int,description nvarchar(100)');
 		tx.executeSql('insert into Account('
 				+ 'id,name,account_type,balance,money_unit,visible,'
 				+ 'display_order,description) ' + 'values (?,?,?,?,?,?,?,?)', [
@@ -75,7 +77,7 @@ window.easynote.on_device_ready(function() {
 						}, function(err) {
 							window.navigator
 									.alert('error when querying database:'
-											+ err.code)
+											+ err.code);
 						});
 			});
 		}
@@ -91,8 +93,8 @@ window.easynote.on_device_ready(function() {
 			tx.executeSql(sql, [],
 				function(tx, result) {
 				retAccountList = pri.copy_result_list(result);
-			}, 	function(err) {
-
+				},
+				function(err) {
 			});
 		});
 		console.debug(traceTag + 'pub.list_account finished.');
@@ -114,7 +116,7 @@ window.easynote.on_device_ready(function() {
 						}, function(err) {
 
 						});
-			})
+			});
 		}
 	};
 

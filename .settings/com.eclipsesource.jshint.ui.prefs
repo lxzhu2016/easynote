@@ -1,0 +1,3 @@
+eclipse.preferences.version=1
+excluded=//*.html\://cordova*.js\://jquery*.js
+included=//*.html\://*.js

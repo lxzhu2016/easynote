@@ -1,4 +1,4 @@
-package com.example.firstpg;
+package org.lxzhu.easynote;
 
 import org.apache.cordova.Config;
 import org.apache.cordova.DroidGap;

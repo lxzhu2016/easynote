@@ -1,7 +1,14 @@
 <system>
-    <settings>
-        <setting key="IasIntegrationServiceUrl" value="http://rfdeviasintegrationserver3.cloudapp.net/"/>
-        <setting key="IasMobileServiceUrl" value="http://rfdeviomobile3.cloudapp.net/"/>
-    </settings>
+
+	<settings>
+
+		<setting
+			key="IasIntegrationServiceUrl"
+			value="http://rfdeviasintegrationserver3.cloudapp.net/" />
+
+		<setting
+			key="IasMobileServiceUrl"
+			value="http://rfdeviomobile3.cloudapp.net/" />
+	</settings>
+
 </system>
-    
